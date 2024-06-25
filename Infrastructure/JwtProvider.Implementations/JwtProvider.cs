@@ -8,14 +8,9 @@ using Services.JwtProvider.Abstractions;
 
 namespace Infrastructure.JwtProvider.Implementations;
 
-public class JwtProvider : IJwtProvider
+public class JwtProvider(IOptions<JwtSettings> jwtSettings) : IJwtProvider
 {
-    private readonly JwtSettings _jwtSettings;
-    
-    public JwtProvider(IOptions<JwtSettings> jwtSettings)
-    {
-        _jwtSettings = jwtSettings.Value;
-    }
+    private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
     public string GenerateToken(User user)
     {
@@ -31,6 +26,7 @@ public class JwtProvider : IJwtProvider
         var token = new JwtSecurityToken(
             claims: claims,
             signingCredentials: signingCredential,
+            issuer: _jwtSettings.Issuer,
             expires: DateTime.UtcNow.AddHours(_jwtSettings.Expiration)
             );
         

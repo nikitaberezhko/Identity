@@ -17,4 +17,7 @@ public class User : BaseEntity
     
     [Column("name")]
     public string Name { get; set; }
+    
+    [Column("is_deleted")]
+    public bool IsDeleted { get; set; }
 }
