@@ -1,3 +1,14 @@
+using Infrastructure.EntityFramework;
+using Infrastructure.JwtProvider.Implementations;
+using Infrastructure.Repositories.Implementations;
+using Microsoft.EntityFrameworkCore;
+using Services.JwtProvider.Abstractions;
+using Services.Repositories.Abstractions;
+using Services.Services.Abstractions;
+using Services.Services.Implementations;
+using Services.Services.Implementations.Mapping;
+using WebApi.Mapping;
+
 namespace WebApi;
 
 public class Program
@@ -8,6 +19,30 @@ public class Program
         
         builder.Services.AddControllers();
         
+        // Options
+        builder.Services.Configure<JwtSettings>(
+            builder.Configuration.GetSection("JwtSettings"));
+        
+        // JwtProvider
+        builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+        
+        
+        // DataContext
+        builder.Services.ConfigureContext(
+            builder.Configuration.GetConnectionString("DefaultConnectionString")!);
+        builder.Services.AddScoped<DbContext, DataContext>();
+
+        // AutoMapper
+        builder.Services.AddAutoMapper(typeof(UserMappingProfile), 
+            typeof(UserModelMappingProfile));
+        
+        // Репозитории
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        
+        // Сервисы
+        builder.Services.AddScoped<IUserService, UserService>();
+
+        builder.Services.AddAuthentication();
         builder.Services.AddAuthorization();
         
         builder.Services.AddEndpointsApiExplorer();
@@ -15,15 +50,10 @@ public class Program
 
         var app = builder.Build();
         
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
-
-        app.UseAuthorization();
 
         app.MapControllers();
 

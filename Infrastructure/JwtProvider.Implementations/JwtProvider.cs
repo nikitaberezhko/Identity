@@ -29,7 +29,7 @@ public class JwtProvider(IOptions<JwtSettings> jwtSettings) : IJwtProvider
             issuer: _jwtSettings.Issuer,
             expires: DateTime.UtcNow.AddHours(_jwtSettings.Expiration)
             );
-        
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        var handler = new JwtSecurityTokenHandler();
+        return handler.WriteToken(token);
     }
 }

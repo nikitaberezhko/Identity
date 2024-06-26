@@ -1,6 +1,6 @@
-namespace WebApi.Models.User;
+namespace WebApi.Models.User.Requests;
 
-public class AuthenticateUserModel
+public class RequestAuthenticateUserModel
 {
     public string Login { get; set; }
     

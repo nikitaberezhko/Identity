@@ -23,15 +23,21 @@ public class UserService(
     
     public async Task<string?> AuthenticateUser(AuthenticateUserDto authenticateUserDto)
     {
-        var requestUser = mapper.Map<User>(authenticateUserDto);
+        var authUser = mapper.Map<User>(authenticateUserDto);
         
-        var user = await userRepository.GetByLogin(requestUser);
+        var user = await userRepository.GetByLogin(authUser);
         
-        if (user == null || user.Password != requestUser.Password )
+        if (user == null || user.Password != authUser.Password )
             return null;
         
         var token = jwtProvider.GenerateToken(user);
         
         return token;
+    }
+
+    public async Task<User?> DeleteUser(DeleteUserDto deleteUserDto)
+    {
+        var delUser = mapper.Map<DeleteUserDto, User>(deleteUserDto);
+        return await userRepository.DeleteAsync(delUser.Id);
     }
 }
