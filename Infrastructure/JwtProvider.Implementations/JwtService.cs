@@ -17,7 +17,6 @@ public static class JwtService
             .GetSection("JwtSettings")
             .Get<JwtSettings>();
         
-        services.AddSingleton(jwtSettings);
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
