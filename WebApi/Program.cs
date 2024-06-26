@@ -2,6 +2,7 @@ using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
@@ -23,9 +24,9 @@ public class Program
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings"));
         
-        // JwtProvider
+        // JwtProvider and auth
         builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-        
+        builder.Services.ConfigureAuthServices(builder.Configuration);
         
         // DataContext
         builder.Services.ConfigureContext(
@@ -54,6 +55,9 @@ public class Program
         app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         app.MapControllers();
 
