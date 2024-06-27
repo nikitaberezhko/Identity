@@ -11,20 +11,15 @@ public class UserMappingProfile : Profile
         CreateMap<AuthenticateUserDto, User>()
             .ForMember(d => d.Id, map => map.Ignore())
             .ForMember(d => d.RoleId, map => map.Ignore())
-            .ForMember(d => d.Role, map => map.Ignore())
             .ForMember(d => d.IsDeleted, map => map.Ignore())
             .ForMember(d => d.Name, map => map.Ignore());
 
-        //CreateMap<AuthorizationUserDto, User>();
-
         CreateMap<CreateUserDto, User>()
             .ForMember(d => d.Id, map => map.Ignore())
-            .ForMember(d => d.Role, map => map.Ignore())
             .ForMember(d => d.IsDeleted, map => map.Ignore());
 
         CreateMap<DeleteUserDto, User>()
             .ForMember(d => d.RoleId, map => map.Ignore())
-            .ForMember(d => d.Role, map => map.Ignore())
             .ForMember(d => d.Login, map => map.Ignore())
             .ForMember(d => d.Password, map => map.Ignore())
             .ForMember(d => d.Name, map => map.Ignore())

@@ -2,7 +2,7 @@ namespace WebApi.Models.User.Requests;
 
 public class RequestCreateUserModel
 {
-    public Guid RoleId { get; set; }
+    public int RoleId { get; set; }
     
     public string Login { get; set; }
     

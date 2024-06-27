@@ -21,11 +21,19 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
     
     public virtual async Task<Guid> AddAsync(T entity)
     {
-        entity.Id = Guid.NewGuid();
-        await DbContext.Set<T>().AddAsync(entity);
-        await DbContext.SaveChangesAsync();
+        try
+        {
+            entity.Id = Guid.NewGuid();
+            await DbContext.Set<T>().AddAsync(entity);
+            await DbContext.SaveChangesAsync();
         
-        return entity.Id;
+            return entity.Id;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return Guid.Empty;
+        }
     }
     
     public virtual async Task<bool> UpdateAsync(T entity)

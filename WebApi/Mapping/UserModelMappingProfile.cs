@@ -1,4 +1,5 @@
 using AutoMapper;
+using Domain;
 using Services.Services.Contracts.User;
 using WebApi.Models.User;
 using WebApi.Models.User.Requests;

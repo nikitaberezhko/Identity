@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240626104538_InitialCreate")]
+    [Migration("20240627072454_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -27,10 +27,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Role", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
+                        .HasColumnType("integer")
                         .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -68,8 +70,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("password");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
                         .HasColumnName("role_id");
 
                     b.HasKey("Id");

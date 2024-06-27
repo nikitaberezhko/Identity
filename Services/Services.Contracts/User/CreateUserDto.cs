@@ -2,7 +2,7 @@ namespace Services.Services.Contracts.User;
 
 public class CreateUserDto
 {
-    public Guid RoleId { get; set; }
+    public int RoleId { get; set; }
     
     public string Login { get; set; }
     

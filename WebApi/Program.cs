@@ -19,6 +19,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddControllers();
+        builder.Services.AddProblemDetails();
         
         // Options
         builder.Services.Configure<JwtSettings>(
@@ -50,6 +51,8 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        app.UseExceptionHandler();
         
         app.UseSwagger();
         app.UseSwaggerUI();

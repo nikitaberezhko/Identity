@@ -5,7 +5,7 @@ namespace Domain;
 public class User : BaseEntity
 {
     [Column("role_id")]
-    public Guid RoleId { get; set; }
+    public int RoleId { get; set; }
     
     public Role Role { get; set; }
     

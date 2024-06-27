@@ -27,7 +27,7 @@ public class UserService(
         
         var user = await userRepository.GetByLogin(authUser);
         
-        if (user == null || user.Password != authUser.Password )
+        if (user == null || user.Password != authUser.Password || user.IsDeleted)
             return null;
         
         var token = jwtProvider.GenerateToken(user);
