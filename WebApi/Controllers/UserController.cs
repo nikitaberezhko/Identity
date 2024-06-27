@@ -22,11 +22,6 @@ public class UserController(
     public async Task<ActionResult<ResponseCreateUserModel>> CreateAsync(
         RequestCreateUserModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-        
         var id = await userService.CreateUser(mapper.Map<CreateUserDto>(model));
         if (id == Guid.Empty)
         {
@@ -42,11 +37,6 @@ public class UserController(
     public async Task<ActionResult<ResponseDeleteUserModel>> DeleteAsync(
         RequestDeleteUserModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-        
         var user = await userService.DeleteUser(mapper.Map<DeleteUserDto>(model));
         
         return new ActionResult<ResponseDeleteUserModel>(
@@ -62,11 +52,6 @@ public class UserController(
     public async Task<ActionResult<ResponseAuthenticateUserModel>> AuthenticateAsync(
         RequestAuthenticateUserModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest();
-        }
-        
         var token = await userService.AuthenticateUser(mapper.Map<AuthenticateUserDto>(model));
 
         if (token != null)

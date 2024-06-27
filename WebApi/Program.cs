@@ -8,6 +8,7 @@ using Services.Services.Abstractions;
 using Services.Services.Implementations;
 using Services.Services.Implementations.Mapping;
 using WebApi.Mapping;
+using WebApi.Models.User.Requests.Validators;
 
 namespace WebApi;
 
@@ -16,38 +17,43 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        var services = builder.Services;
         
-        builder.Services.AddControllers();
-        builder.Services.AddProblemDetails();
+        services.AddControllers();
+        services.AddProblemDetails();
         
         // Options
-        builder.Services.Configure<JwtSettings>(
+        services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings"));
         
         // JwtProvider and auth
-        builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-        builder.Services.ConfigureAuthServices(builder.Configuration);
+        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.ConfigureAuthServices(builder.Configuration);
+        
+        // FluentValidation
+        services.ConfigureUserValidators();
         
         // DataContext
-        builder.Services.ConfigureContext(
+        services.ConfigureContext(
             builder.Configuration.GetConnectionString("DefaultConnectionString")!);
-        builder.Services.AddScoped<DbContext, DataContext>();
+        services.AddScoped<DbContext, DataContext>();
 
         // AutoMapper
-        builder.Services.AddAutoMapper(typeof(UserMappingProfile), 
+        services.AddAutoMapper(typeof(UserMappingProfile), 
             typeof(UserModelMappingProfile));
         
         // Репозитории
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         
         // Сервисы
-        builder.Services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IUserService, UserService>();
 
-        builder.Services.AddAuthentication();
-        builder.Services.AddAuthorization();
+        services.AddAuthentication();
+        services.AddAuthorization();
         
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
 
         var app = builder.Build();
 
