@@ -1,11 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Services.Services.Abstractions;
 using Services.Services.Contracts.User;
 using WebApi.Mapping;
@@ -84,16 +81,16 @@ public class UserController(
 
     [Authorize]
     [HttpPost("authorize")]
-    public Task<ActionResult<ResponseAuthorizationModel>> AuthorizeAsync()
+    public async Task<ActionResult<ResponseAuthorizationModel>> AuthorizeAsync()
     {
         var model = HttpContext.Request.Headers.Authorization.ToArray();
         JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(model[0].Split()[1]);
         Claim[] claims = jwtSecurityToken.Claims.ToArray();
         
-        return Task.FromResult(new ActionResult<ResponseAuthorizationModel>(
+        return new ActionResult<ResponseAuthorizationModel>(
             new ResponseAuthorizationModel()
             {
                 RoleId = int.Parse(claims[1].Value)
-            }));
+            });
     }
 }

@@ -2,7 +2,6 @@ using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
