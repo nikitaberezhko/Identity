@@ -8,6 +8,7 @@ using Services.Services.Abstractions;
 using Services.Services.Implementations;
 using Services.Services.Implementations.Mapping;
 using WebApi.Mapping;
+using WebApi.Middlewares;
 using WebApi.Models.User.Requests.Validators;
 
 namespace WebApi;
@@ -21,7 +22,6 @@ public class Program
         var services = builder.Services;
         
         services.AddControllers();
-        services.AddProblemDetails();
         
         // Options
         services.Configure<JwtSettings>(
@@ -33,6 +33,9 @@ public class Program
         
         // FluentValidation
         services.ConfigureUserValidators();
+        
+        // ExceptionHandlerMiddleware
+        services.AddTransient<ExceptionHandlerMiddleware>();
         
         // DataContext
         services.ConfigureContext(
@@ -57,7 +60,7 @@ public class Program
 
         var app = builder.Build();
 
-        app.UseExceptionHandler();
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
         
         app.UseSwagger();
         app.UseSwaggerUI();

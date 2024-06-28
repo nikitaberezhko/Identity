@@ -27,10 +27,9 @@ public class UserController(
         {
             return new ConflictResult();
         }
-        
-        var response = new ResponseCreateUserModel() { Id = id };
-        
-        return new CreatedResult(nameof(CreateAsync), response);
+  
+        return new CreatedResult(nameof(CreateAsync), new ResponseCreateUserModel() 
+            { Id = id });
     }
 
     [HttpDelete("delete")]
@@ -75,6 +74,7 @@ public class UserController(
         return new ActionResult<ResponseAuthorizationModel>(
             new ResponseAuthorizationModel()
             {
+                UserId = Guid.Parse(claims[0].Value),
                 RoleId = int.Parse(claims[1].Value)
             });
     }
