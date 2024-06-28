@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.JwtProvider.Implementations;
 
-public static class JwtService
+public static class JwtConfigurer
 {
     public static IServiceCollection ConfigureAuthServices(
         this IServiceCollection services, 

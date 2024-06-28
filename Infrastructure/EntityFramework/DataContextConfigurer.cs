@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.EntityFramework;
 
-public static class DataContextService
+public static class DataContextConfigurer
 {
     public static IServiceCollection ConfigureContext(this IServiceCollection services, string connectionString)
     {

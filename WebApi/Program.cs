@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.Repositories.Implementations;
@@ -7,6 +8,7 @@ using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
 using Services.Services.Implementations;
 using Services.Services.Implementations.Mapping;
+using WebApi.Extensions;
 using WebApi.Mapping;
 using WebApi.Middlewares;
 using WebApi.Models.User.Requests.Validators;
@@ -26,6 +28,9 @@ public class Program
         // Options
         services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings"));
+        
+        // ApiApiVersioning
+        services.ConfigureApiVersioning();
         
         // JwtProvider and auth
         services.AddScoped<IJwtProvider, JwtProvider>();
