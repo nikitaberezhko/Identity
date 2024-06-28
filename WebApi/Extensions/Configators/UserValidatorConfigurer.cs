@@ -1,10 +1,9 @@
 using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
 using Services.Services.Contracts.User;
 
 namespace WebApi.Models.User.Requests.Validators;
 
-public static class UserValidatorService
+public static class UserValidatorConfigurer
 {
     public static IServiceCollection ConfigureUserValidators(
         this IServiceCollection services)

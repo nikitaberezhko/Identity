@@ -1,8 +1,5 @@
-using Asp.Versioning;
-using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.Repositories.Implementations;
-using Microsoft.EntityFrameworkCore;
 using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
@@ -11,7 +8,6 @@ using Services.Services.Implementations.Mapping;
 using WebApi.Extensions;
 using WebApi.Mapping;
 using WebApi.Middlewares;
-using WebApi.Models.User.Requests.Validators;
 
 namespace WebApi;
 
@@ -24,28 +20,15 @@ public class Program
         var services = builder.Services;
         
         services.AddControllers();
+
+        // Extensions
+        services.AddExtensions(builder.Configuration);
         
-        // Options
-        services.Configure<JwtSettings>(
-            builder.Configuration.GetSection("JwtSettings"));
-        
-        // ApiApiVersioning
-        services.ConfigureApiVersioning();
-        
-        // JwtProvider and auth
+        // JwtProvider
         services.AddScoped<IJwtProvider, JwtProvider>();
-        services.ConfigureAuthServices(builder.Configuration);
-        
-        // FluentValidation
-        services.ConfigureUserValidators();
         
         // ExceptionHandlerMiddleware
         services.AddTransient<ExceptionHandlerMiddleware>();
-        
-        // DataContext
-        services.ConfigureContext(
-            builder.Configuration.GetConnectionString("DefaultConnectionString")!);
-        services.AddScoped<DbContext, DataContext>();
 
         // AutoMapper
         services.AddAutoMapper(typeof(UserMappingProfile), 
