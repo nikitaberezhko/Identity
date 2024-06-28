@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using Domain;
 using FluentValidation;
@@ -12,14 +13,16 @@ public class UserService(
     IUserRepository userRepository,
     IMapper mapper,
     IJwtProvider jwtProvider,
-    IValidator<CreateUserDto> createUserValidator,
     IValidator<AuthenticateUserDto> authenticateUserValidator,
+    IValidator<AuthorizationUserDto> authorizationUserValidator,
+    IValidator<CreateUserDto> createUserValidator,
     IValidator<DeleteUserDto> deleteUserValidator)
     : IUserService
 {
     public async Task<Guid> CreateUser(CreateUserDto createUserDto)
     {
         var validationResult = await createUserValidator.ValidateAsync(createUserDto);
+        
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
@@ -32,6 +35,7 @@ public class UserService(
     public async Task<string?> AuthenticateUser(AuthenticateUserDto authenticateUserDto)
     {
         var validationResult = await authenticateUserValidator.ValidateAsync(authenticateUserDto);
+        
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
@@ -44,10 +48,27 @@ public class UserService(
         var token = jwtProvider.GenerateToken(user);
         return token;
     }
+    
+    public async Task<(Guid userId, int roleId)> AuthorizeUser(
+        AuthorizationUserDto authorizationUserDto)
+    {
+        var validationResult = 
+            await authorizationUserValidator.ValidateAsync(authorizationUserDto);
+        
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+        
+        var jwtSecurityToken = new JwtSecurityToken(authorizationUserDto.Token);
+        var claims = jwtSecurityToken.Claims.ToArray();
+        
+        return (userId: Guid.Parse(claims[0].Value), 
+            roleId: int.Parse(claims[1].Value));
+    }
 
     public async Task<User?> DeleteUser(DeleteUserDto deleteUserDto)
     {
         var validationResult = await deleteUserValidator.ValidateAsync(deleteUserDto);
+        
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         

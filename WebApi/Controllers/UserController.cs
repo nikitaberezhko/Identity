@@ -1,5 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using Asp.Versioning;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -30,8 +28,8 @@ public class UserController(
             return new ConflictResult();
         }
   
-        return new CreatedResult(nameof(CreateAsync), new ResponseCreateUserModel() 
-            { Id = id });
+        return new CreatedResult(nameof(CreateAsync),
+            new ResponseCreateUserModel() { Id = id });
     }
 
     [HttpDelete("delete")]
@@ -39,45 +37,43 @@ public class UserController(
         RequestDeleteUserModel model)
     {
         var user = await userService.DeleteUser(mapper.Map<DeleteUserDto>(model));
-        
-        return new ActionResult<ResponseDeleteUserModel>(
-            new ResponseDeleteUserModel()
-            {
-                Id = user.Id,
-                Name = user.Name,
-                RoleId = user.RoleId
-            });
+
+        return new ResponseDeleteUserModel()
+        {
+            Id = user.Id,
+            Name = user.Name,
+            RoleId = user.RoleId
+        };
     }
     
     [HttpPost("authenticate")]
     public async Task<ActionResult<ResponseAuthenticateUserModel>> AuthenticateAsync(
         RequestAuthenticateUserModel model)
     {
-        var token = await userService.AuthenticateUser(mapper.Map<AuthenticateUserDto>(model));
+        var token = await userService.AuthenticateUser(
+            mapper.Map<AuthenticateUserDto>(model));
 
         if (token != null)
-            return new ActionResult<ResponseAuthenticateUserModel>(
-                new ResponseAuthenticateUserModel()
+            return new ResponseAuthenticateUserModel()
             {
                 Token = token
-            });
+            };
 
         return new UnauthorizedResult();
     }
 
     [Authorize]
     [HttpPost("authorize")]
-    public async Task<ActionResult<ResponseAuthorizationModel>> AuthorizeAsync()
+    public async Task<ActionResult<ResponseAuthorizationModel>> AuthorizeAsync(
+        RequestAuthorizationUserModel model)
     {
-        var model = HttpContext.Request.Headers.Authorization.ToArray();
-        JwtSecurityToken jwtSecurityToken = new JwtSecurityToken(model[0].Split()[1]);
-        Claim[] claims = jwtSecurityToken.Claims.ToArray();
+        var result = await userService.AuthorizeUser(
+            mapper.Map<AuthorizationUserDto>(model));
         
-        return new ActionResult<ResponseAuthorizationModel>(
-            new ResponseAuthorizationModel()
-            {
-                UserId = Guid.Parse(claims[0].Value),
-                RoleId = int.Parse(claims[1].Value)
-            });
+        return new ResponseAuthorizationModel()
+        {
+            UserId = result.userId,
+            RoleId = result.roleId
+        };
     }
 }
