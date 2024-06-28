@@ -20,7 +20,9 @@ public class Program
         var services = builder.Services;
         
         services.AddControllers();
-
+        
+        services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+        
         // Extensions
         services.AddExtensions(builder.Configuration);
         

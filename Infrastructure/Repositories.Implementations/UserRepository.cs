@@ -6,7 +6,7 @@ namespace Infrastructure.Repositories.Implementations;
 
 public class UserRepository(DbContext dbContext) : Repository<User>(dbContext), IUserRepository
 {
-    public Task<User> GetByLogin(User user)
+    public Task<User?> GetByLogin(User user)
     {
         return DbContext.Set<User>().FirstOrDefaultAsync(x => x.Login == user.Login);
     }

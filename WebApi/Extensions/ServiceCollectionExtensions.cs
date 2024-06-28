@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddApiVersioning();
+        services.ConfigureApiVersioning();
         services.ConfigureContext(configuration.GetConnectionString("DefaultConnectionString")!);
         services.AddScoped<DbContext, DataContext>();
         services.ConfigureAuthServices(configuration);

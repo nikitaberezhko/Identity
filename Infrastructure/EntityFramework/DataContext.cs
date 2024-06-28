@@ -12,12 +12,13 @@ public class DataContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<BaseEntity>()
+        modelBuilder.Entity<Role>()
             .Property(x => x.Id).HasColumnName("id");
-
         modelBuilder.Entity<Role>()
             .Property(x => x.Name).HasColumnName("name");
-
+        
+        modelBuilder.Entity<User>()
+            .Property(x => x.Id).HasColumnName("id");
         modelBuilder.Entity<User>()
             .Property(x => x.RoleId).HasColumnName("role_id");
         modelBuilder.Entity<User>()
@@ -27,7 +28,7 @@ public class DataContext : DbContext
         modelBuilder.Entity<User>()
             .Property(x => x.Name).HasColumnName("name");
         modelBuilder.Entity<User>()
-            .Property(x => x.IsDeleted).HasColumnName("id_deleted");
+            .Property(x => x.IsDeleted).HasColumnName("is_deleted");
         
         modelBuilder
             .Entity<User>()
