@@ -29,7 +29,7 @@ public class UserController(
         }
   
         return new CreatedResult(nameof(CreateAsync),
-            new ResponseCreateUserModel() { Id = id });
+            new ResponseCreateUserModel { Id = id });
     }
 
     [HttpDelete("delete")]
@@ -38,7 +38,7 @@ public class UserController(
     {
         var user = await userService.DeleteUser(mapper.Map<DeleteUserDto>(model));
 
-        return new ResponseDeleteUserModel()
+        return new ResponseDeleteUserModel
         {
             Id = user.Id,
             Name = user.Name,
@@ -54,7 +54,7 @@ public class UserController(
             mapper.Map<AuthenticateUserDto>(model));
 
         if (token != null)
-            return new ResponseAuthenticateUserModel()
+            return new ResponseAuthenticateUserModel
             {
                 Token = token
             };
@@ -70,7 +70,7 @@ public class UserController(
         var result = await userService.AuthorizeUser(
             mapper.Map<AuthorizationUserDto>(model));
         
-        return new ResponseAuthorizationModel()
+        return new ResponseAuthorizationModel
         {
             UserId = result.userId,
             RoleId = result.roleId

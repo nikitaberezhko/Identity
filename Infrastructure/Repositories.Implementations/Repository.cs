@@ -1,4 +1,6 @@
 using Domain;
+using Exceptions.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
 
@@ -29,10 +31,14 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
         
             return entity.Id;
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine(e.Message);
-            return Guid.Empty;
+            throw new DomainException
+            {
+                Title = "Create user failed",
+                Message = "User with this login already exists",
+                StatusCode = StatusCodes.Status409Conflict
+            };
         }
     }
     
@@ -49,7 +55,7 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
         return false;
     }
     
-    public virtual async Task<T?> DeleteAsync(Guid id)
+    public virtual async Task<T> DeleteAsync(Guid id)
     {
         var entity = await DbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
         if (entity != null)
@@ -59,6 +65,11 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
             return entity;
         }
 
-        return null;
+        throw new DomainException
+        {
+            Title = "Delete user failed",
+            Message = $"User with id: {id} not found",
+            StatusCode = StatusCodes.Status404NotFound
+        };
     }
 }

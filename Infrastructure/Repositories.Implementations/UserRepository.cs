@@ -1,4 +1,6 @@
 using Domain;
+using Exceptions.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
 
@@ -6,21 +8,17 @@ namespace Infrastructure.Repositories.Implementations;
 
 public class UserRepository(DbContext dbContext) : Repository<User>(dbContext), IUserRepository
 {
-    public Task<User?> GetByLogin(User user)
+    public async Task<User> GetByLogin(User user)
     {
-        return DbContext.Set<User>().FirstOrDefaultAsync(x => x.Login == user.Login);
-    }
-
-    public override async Task<User?> DeleteAsync(Guid id)
-    {
-        var user = await DbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
-        if (user != null)
+        var result = await DbContext.Set<User>().FirstOrDefaultAsync(x => x.Login == user.Login);
+        if (result != null)
+            return result;
+        
+        throw new DomainException
         {
-            user.IsDeleted = true;
-            await DbContext.SaveChangesAsync();
-            return user;
-        }
-
-        return null;
+            Title = "User not found",
+            Message = $"User with this login: {user.Login} not found",
+            StatusCode = StatusCodes.Status404NotFound
+        };
     }
 }

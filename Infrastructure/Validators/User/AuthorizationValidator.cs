@@ -1,7 +1,7 @@
 using FluentValidation;
 using Services.Services.Contracts.User;
 
-namespace Infrastructure.Validators;
+namespace Infrastructure.Validators.User;
 
 public class AuthorizationValidator : AbstractValidator<AuthorizationUserDto>
 {

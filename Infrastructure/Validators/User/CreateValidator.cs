@@ -1,7 +1,7 @@
 using FluentValidation;
 using Services.Services.Contracts.User;
 
-namespace WebApi.Models.User.Requests.Validators;
+namespace Infrastructure.Validators.User;
 
 public class CreateValidator : AbstractValidator<CreateUserDto>
 {

@@ -1,5 +1,6 @@
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.Repositories.Implementations;
+using Infrastructure.Settings;
 using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;

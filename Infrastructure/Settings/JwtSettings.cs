@@ -1,4 +1,4 @@
-namespace Infrastructure.JwtProvider.Implementations;
+namespace Infrastructure.Settings;
 
 public class JwtSettings
 {
