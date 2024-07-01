@@ -1,6 +1,7 @@
 using Exceptions.Infrastructure;
 using Exceptions.Services;
 using FluentValidation;
+using WebApi.Models;
 
 namespace WebApi.Middlewares;
 
@@ -15,25 +16,56 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         catch (DomainException e)
         {
             logger.LogWarning(e, e.Message);
-            InterceptResponse(e.StatusCode);
+
+            var response = new CommonResponse<Empty>
+            {
+                Data = null,
+                Error = new Error
+                {
+                    Title = e.Title,
+                    Message = e.Message,
+                    StatusCode = e.StatusCode
+                }
+            };
+            
+            context.Response.Clear();
+            await context.Response.WriteAsJsonAsync(response);
         }
         catch (ServiceException e)
         {
-            logger.LogWarning(e, e.Message);
-            InterceptResponse(e.StatusCode);
+            var response = new CommonResponse<Empty>
+            {
+                Data = null,
+                Error = new Error
+                {
+                    Title = e.Title,
+                    Message = e.Message,
+                    StatusCode = e.StatusCode
+                }
+            };
+            
+            context.Response.Clear();
+            await context.Response.WriteAsJsonAsync(response);
         }
         catch (Exception e)
         {
             logger.LogWarning(e, e.Message);
             
-            logger.LogWarning(e, e.Message);
-            InterceptResponse(StatusCodes.Status500InternalServerError);
-        }
-
-        void InterceptResponse(int statusCode)
-        {
+            var response = new CommonResponse<Empty>
+            {
+                Data = null,
+                Error = new Error
+                {
+                    Title = "Unknown server error",
+                    Message = "Please retry query",
+                    StatusCode = StatusCodes.Status500InternalServerError
+                }
+            };
+            
             context.Response.Clear();
-            context.Response.StatusCode = statusCode;
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 }
+
+public record Empty();

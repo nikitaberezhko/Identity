@@ -20,7 +20,6 @@ public class UserController(
     IMapper mapper) : ControllerBase
 {
     [HttpPost("create")]
-    
     public async Task<ActionResult<CommonResponse<ResponseCreateUserModel>>> CreateAsync(
         RequestCreateUserModel model)
     {

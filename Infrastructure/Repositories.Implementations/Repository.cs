@@ -64,12 +64,12 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
             await DbContext.SaveChangesAsync();
             return entity;
         }
-        else
-            throw new DomainException
-            {
-                Title = "Delete user failed",
-                Message = $"User with id: {id} not found",
-                StatusCode = StatusCodes.Status404NotFound
-            };
+
+        throw new DomainException
+        {
+            Title = "Delete user failed",
+            Message = $"User with id: {id} not found",
+            StatusCode = StatusCodes.Status404NotFound
+        };
     }
 }

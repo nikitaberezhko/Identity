@@ -29,10 +29,10 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this fields: \nlogin: {createUserDto.Login}" +
-                          $"\npassword: {createUserDto.Password}" +
-                          $"\nrole: {createUserDto.RoleId}" +
-                          $"\nname: {createUserDto.Name} failed validation",
+                Message = $"User with this fields: login: {createUserDto.Login} " +
+                          $"password: {createUserDto.Password} " +
+                          $"role: {createUserDto.RoleId} " +
+                          $"name: {createUserDto.Name} failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
@@ -50,8 +50,8 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this fields: \nlogin{authenticateUserDto.Login}" +
-                          $"\npassword: {authenticateUserDto.Password} failed validation",
+                Message = $"User with this fields: login{authenticateUserDto.Login} " +
+                          $"password: {authenticateUserDto.Password} failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
