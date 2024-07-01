@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
 
-namespace Infrastructure.Repositories.Implementations;
+namespace Persistence.Repositories.Implementations;
 
 public class UserRepository(DbContext dbContext) : Repository<User>(dbContext), IUserRepository
 {

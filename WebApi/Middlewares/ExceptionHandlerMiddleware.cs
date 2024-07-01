@@ -40,8 +40,6 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
                 "Please retry query", 
                 StatusCodes.Status500InternalServerError);
         }
-        
-        
     }
     
     private async Task InterceptResponseAsync(HttpContext context,

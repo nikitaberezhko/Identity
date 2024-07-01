@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
 
-namespace Infrastructure.Repositories.Implementations;
+namespace Persistence.Repositories.Implementations;
 
 public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
     where T : BaseEntity

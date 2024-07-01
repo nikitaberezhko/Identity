@@ -1,11 +1,11 @@
 using System.Text;
 using Asp.Versioning;
 using FluentValidation;
-using Infrastructure.Persistence.EntityFramework;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Persistence.EntityFramework;
 using Services.Services.Models.User.Request;
 using Services.Validators.User;
 
