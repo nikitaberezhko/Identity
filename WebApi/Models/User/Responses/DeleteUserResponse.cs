@@ -1,4 +1,4 @@
-namespace WebApi.Mapping;
+namespace WebApi.Models.User.Responses;
 
 public class DeleteUserResponse
 {

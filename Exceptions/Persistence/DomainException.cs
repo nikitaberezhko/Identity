@@ -1,4 +1,4 @@
-namespace Exceptions.Infrastructure;
+namespace Exceptions.Persistence;
 
 public class DomainException : Exception
 {

@@ -1,6 +1,6 @@
-using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.PasswordHasher;
+using Infrastructure.Persistence.EntityFramework;
 using Infrastructure.Repositories.Implementations;
 using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;

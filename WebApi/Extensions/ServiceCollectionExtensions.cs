@@ -1,7 +1,7 @@
 using System.Text;
 using Asp.Versioning;
 using FluentValidation;
-using Infrastructure.EntityFramework;
+using Infrastructure.Persistence.EntityFramework;
 using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

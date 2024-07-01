@@ -1,5 +1,5 @@
 using Domain;
-using Exceptions.Infrastructure;
+using Exceptions.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
