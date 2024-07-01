@@ -18,7 +18,8 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         {
             logger.LogWarning(e, e.Message);
 
-            await InterceptResponseAsync(e.Title,
+            await InterceptResponseAsync(context,
+                e.Title,
                 e.Message,
                 e.StatusCode);
         }
@@ -26,7 +27,8 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         {
             logger.LogWarning(e, e.Message);
             
-            await InterceptResponseAsync(e.Title,
+            await InterceptResponseAsync(context,
+                e.Title,
                 e.Message,
                 e.StatusCode);
         }
@@ -34,27 +36,34 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         {
             logger.LogError(e, e.Message);
             
-            await InterceptResponseAsync("Unknown server error", 
+            await InterceptResponseAsync(context,
+                "Unknown server error", 
                 "Please retry query", 
                 StatusCodes.Status500InternalServerError);
         }
-
-        async Task InterceptResponseAsync(string title, string message, int statusCode)
+        
+        
+    }
+    
+    private async Task InterceptResponseAsync(HttpContext context,
+        string title, 
+        string message, 
+        int statusCode)
+    {
+        var response = new CommonResponse<Empty>
         {
-            var response = new CommonResponse<Empty>
+            Data = null,
+            Error = new Error
             {
-                Data = null,
-                Error = new Error
-                {
-                    Title = title,
-                    Message = message,
-                    StatusCode = statusCode
-                }
-            };
+                Title = title,
+                Message = message,
+                StatusCode = statusCode
+            }
+        };
             
-            context.Response.Clear();
-            await context.Response.WriteAsJsonAsync(response);
-        }
+        context.Response.Clear();
+        context.Response.StatusCode = statusCode;
+        await context.Response.WriteAsJsonAsync(response);
     }
 }
 

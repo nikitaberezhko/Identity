@@ -8,6 +8,7 @@ using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
 using Services.Services.Contracts.User;
+using Services.Services.Contracts.User.Response;
 
 namespace Services.Services.Implementations;
 
@@ -15,6 +16,7 @@ public class UserService(
     IUserRepository userRepository,
     IMapper mapper,
     IJwtProvider jwtProvider,
+    IPasswordHasher passwordHasher,
     IValidator<AuthenticateUserDto> authenticateUserValidator,
     IValidator<AuthorizationUserDto> authorizationUserValidator,
     IValidator<CreateUserDto> createUserValidator,
@@ -29,14 +31,13 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this fields: login: {createUserDto.Login} " +
-                          $"password: {createUserDto.Password} " +
-                          $"role: {createUserDto.RoleId} " +
-                          $"name: {createUserDto.Name} failed validation",
+                Message = $"User with this fields failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
         var user = mapper.Map<User>(createUserDto);
+        
+        user.Password = passwordHasher.GenerateHash(user.Password);
         
         var id = await userRepository.AddAsync(user);
         return id;
@@ -50,15 +51,14 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this fields: login{authenticateUserDto.Login} " +
-                          $"password: {authenticateUserDto.Password} failed validation",
+                Message = $"User with this fields: login failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
         var authUser = mapper.Map<User>(authenticateUserDto);
         var user = await userRepository.GetByLogin(authUser);
 
-        if (user.Password != authUser.Password)
+        if (passwordHasher.VerifyHash(user.Password, user.Password))
             throw new ServiceException
             {
                 Title = "Authentication failed",
@@ -66,7 +66,7 @@ public class UserService(
                 StatusCode = StatusCodes.Status401Unauthorized
             };
         
-        if(user.IsDeleted)
+        if (user.IsDeleted)
             throw new ServiceException
             {
                 Title = "Authentication failed",
@@ -78,7 +78,7 @@ public class UserService(
         return token;
     }
     
-    public async Task<(Guid userId, int roleId)> AuthorizeUser(
+    public async Task<ResponseAuthorizationUserDto> AuthorizeUser(
         AuthorizationUserDto authorizationUserDto)
     {
         var validationResult = 
@@ -88,15 +88,20 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this token: {authorizationUserDto.Token} failed validation",
+                Message = $"User with this token failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
         var jwtSecurityToken = new JwtSecurityToken(authorizationUserDto.Token);
         var claims = jwtSecurityToken.Claims.ToArray();
         
-        return (userId: Guid.Parse(claims[0].Value), 
-            roleId: int.Parse(claims[1].Value));
+        var result = new ResponseAuthorizationUserDto
+        {
+            UserId = Guid.Parse(claims[0].Value),
+            RoleId = int.Parse(claims[1].Value)
+        };
+        
+        return result;
     }
 
     public async Task<User?> DeleteUser(DeleteUserDto deleteUserDto)
@@ -107,7 +112,7 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this id: {deleteUserDto.Id} failed validation",
+                Message = $"User with this id: failed validation",
                 StatusCode = StatusCodes.Status400BadRequest
             };
         

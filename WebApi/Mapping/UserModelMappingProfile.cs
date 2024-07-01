@@ -1,6 +1,8 @@
 using AutoMapper;
 using Services.Services.Contracts.User;
+using Services.Services.Contracts.User.Response;
 using WebApi.Models.User.Requests;
+using WebApi.Models.User.Responses;
 
 namespace WebApi.Mapping;
 
@@ -24,5 +26,10 @@ public class UserModelMappingProfile : Profile
 
         CreateMap<RequestDeleteUserModel, DeleteUserDto>()
             .ForMember(d => d.Id, map => map.MapFrom(c => c.Id));
+        
+        // response models
+        CreateMap<ResponseAuthorizationUserDto, ResponseAuthorizationModel>()
+            .ForMember(d => d.UserId, map => map.MapFrom(c => c.UserId))
+            .ForMember(d => d.RoleId, map => map.MapFrom(c => c.RoleId));
     }
 }

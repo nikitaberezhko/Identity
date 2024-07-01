@@ -13,7 +13,7 @@ using WebApi.Models.User.Responses;
 namespace WebApi.Controllers;
 
 [ApiController]
-[Route("api/v{v:apiVersion}/[controller]")]
+[Route("api/v{v:apiVersion}/users/")]
 [ApiVersion(1.0)]
 public class UserController(
     IUserService userService,
@@ -25,12 +25,13 @@ public class UserController(
     {
         var id = await userService.CreateUser(mapper.Map<CreateUserDto>(model));
 
-        return new CreatedResult(nameof(CreateAsync),
+        var response = new CreatedResult(nameof(CreateAsync),
             new CommonResponse<ResponseCreateUserModel>
             {
                 Data = new ResponseCreateUserModel { Id = id },
-                Error = null
             });
+        
+        return response;
     }
 
     [HttpDelete("delete")]
@@ -39,16 +40,17 @@ public class UserController(
     {
         var user = await userService.DeleteUser(mapper.Map<DeleteUserDto>(model));
 
-        return new CommonResponse<ResponseDeleteUserModel>
+        var response = new CommonResponse<ResponseDeleteUserModel>
         {
             Data = new ResponseDeleteUserModel
             {
                 Id = user.Id,
                 Name = user.Name,
                 RoleId = user.RoleId
-            },
-            Error = null
+            }
         };
+        
+        return response;
     }
     
     [HttpPost("authenticate")]
@@ -58,11 +60,11 @@ public class UserController(
         var token = await userService.AuthenticateUser(
             mapper.Map<AuthenticateUserDto>(model));
 
-        return new CommonResponse<ResponseAuthenticateUserModel>
+        var response = new CommonResponse<ResponseAuthenticateUserModel>
         {
-            Data = new ResponseAuthenticateUserModel { Token = token },
-            Error = null
+            Data = new ResponseAuthenticateUserModel { Token = token }
         };
+        return response;
     }
 
     [Authorize]
@@ -73,14 +75,16 @@ public class UserController(
         var result = await userService.AuthorizeUser(
             mapper.Map<AuthorizationUserDto>(model));
 
-        return new CommonResponse<ResponseAuthorizationModel>
+        var responseModel = mapper.Map<ResponseAuthorizationModel>(result);
+        var response = new CommonResponse<ResponseAuthorizationModel>
         {
             Data = new ResponseAuthorizationModel
             {
-                UserId = result.userId,
-                RoleId = result.roleId
-            },
-            Error = null
+                UserId = responseModel.UserId,
+                RoleId = responseModel.RoleId
+            }
         };
+        
+        return response;
     }
 }

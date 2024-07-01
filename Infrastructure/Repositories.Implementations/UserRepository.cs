@@ -17,7 +17,7 @@ public class UserRepository(DbContext dbContext) : Repository<User>(dbContext), 
         throw new DomainException
         {
             Title = "User not found",
-            Message = $"User with this login: {user.Login} not found",
+            Message = $"User with this login not found",
             StatusCode = StatusCodes.Status404NotFound
         };
     }

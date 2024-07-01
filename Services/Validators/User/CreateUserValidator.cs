@@ -1,11 +1,11 @@
 using FluentValidation;
 using Services.Services.Contracts.User;
 
-namespace Infrastructure.Validators.User;
+namespace Services.Validators.User;
 
-public class CreateValidator : AbstractValidator<CreateUserDto>
+public class CreateUserValidator : AbstractValidator<CreateUserDto>
 {
-    public CreateValidator()
+    public CreateUserValidator()
     {
         RuleFor(x => x.RoleId).NotEmpty();
 

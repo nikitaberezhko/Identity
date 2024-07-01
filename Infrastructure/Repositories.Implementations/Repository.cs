@@ -68,7 +68,7 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
         throw new DomainException
         {
             Title = "Delete user failed",
-            Message = $"User with id: {id} not found",
+            Message = $"User with id not found",
             StatusCode = StatusCodes.Status404NotFound
         };
     }

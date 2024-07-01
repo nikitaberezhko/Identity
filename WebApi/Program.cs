@@ -1,6 +1,9 @@
+using Infrastructure.EntityFramework;
 using Infrastructure.JwtProvider.Implementations;
+using Infrastructure.PasswordHasher;
 using Infrastructure.Repositories.Implementations;
 using Infrastructure.Settings;
+using Microsoft.EntityFrameworkCore;
 using Services.JwtProvider.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
@@ -25,10 +28,15 @@ public class Program
         services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
         
         // Extensions
-        services.AddExtensions(builder.Configuration);
+        services.ConfigureApiVersioning();
+        services.ConfigureContext(builder.Configuration.GetConnectionString("DefaultConnectionString")!);
+        services.AddScoped<DbContext, DataContext>();
+        services.ConfigureAuthServices(builder.Configuration);
+        services.ConfigureUserValidators();
         
-        // JwtProvider
+        // Auth services
         services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
         
         // ExceptionHandlerMiddleware
         services.AddTransient<ExceptionHandlerMiddleware>();
