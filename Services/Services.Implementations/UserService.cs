@@ -29,7 +29,7 @@ public class UserService(
             throw new ServiceException
             {
                 Title = "Validation failed",
-                Message = $"User with this fields: \nlogin{createUserDto.Login}" +
+                Message = $"User with this fields: \nlogin: {createUserDto.Login}" +
                           $"\npassword: {createUserDto.Password}" +
                           $"\nrole: {createUserDto.RoleId}" +
                           $"\nname: {createUserDto.Name} failed validation",

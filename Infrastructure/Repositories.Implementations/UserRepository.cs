@@ -13,12 +13,12 @@ public class UserRepository(DbContext dbContext) : Repository<User>(dbContext), 
         var result = await DbContext.Set<User>().FirstOrDefaultAsync(x => x.Login == user.Login);
         if (result != null)
             return result;
-        
-        throw new DomainException
-        {
-            Title = "User not found",
-            Message = $"User with this login: {user.Login} not found",
-            StatusCode = StatusCodes.Status404NotFound
-        };
+        else
+            throw new DomainException
+            {
+                Title = "User not found",
+                Message = $"User with this login: {user.Login} not found",
+                StatusCode = StatusCodes.Status404NotFound
+            };
     }
 }

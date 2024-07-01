@@ -1,3 +1,5 @@
+using Exceptions.Infrastructure;
+using Exceptions.Services;
 using FluentValidation;
 
 namespace WebApi.Middlewares;
@@ -10,16 +12,26 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         {
             await next(context);
         }
+        catch (DomainException e)
+        {
+            logger.LogWarning(e, e.Message);
+            InterceptResponse(e.StatusCode);
+        }
+        catch (ServiceException e)
+        {
+            logger.LogWarning(e, e.Message);
+            InterceptResponse(e.StatusCode);
+        }
         catch (Exception e)
         {
-            var statusCode = e switch
-            {
-                ValidationException => StatusCodes.Status400BadRequest,
-                _ => StatusCodes.Status500InternalServerError
-            };
-            
             logger.LogWarning(e, e.Message);
             
+            logger.LogWarning(e, e.Message);
+            InterceptResponse(StatusCodes.Status500InternalServerError);
+        }
+
+        void InterceptResponse(int statusCode)
+        {
             context.Response.Clear();
             context.Response.StatusCode = statusCode;
         }

@@ -1,5 +1,4 @@
 using FluentValidation;
-using Infrastructure.Validators;
 using Infrastructure.Validators.User;
 using Services.Services.Contracts.User;
 
