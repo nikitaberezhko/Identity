@@ -5,7 +5,8 @@ using WebApi.Models;
 
 namespace WebApi.Middlewares;
 
-public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger) : IMiddleware
+public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logger) 
+    : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -17,48 +18,37 @@ public class ExceptionHandlerMiddleware(ILogger<ExceptionHandlerMiddleware> logg
         {
             logger.LogWarning(e, e.Message);
 
-            var response = new CommonResponse<Empty>
-            {
-                Data = null,
-                Error = new Error
-                {
-                    Title = e.Title,
-                    Message = e.Message,
-                    StatusCode = e.StatusCode
-                }
-            };
-            
-            context.Response.Clear();
-            await context.Response.WriteAsJsonAsync(response);
+            await InterceptResponseAsync(e.Title,
+                e.Message,
+                e.StatusCode);
         }
         catch (ServiceException e)
         {
-            var response = new CommonResponse<Empty>
-            {
-                Data = null,
-                Error = new Error
-                {
-                    Title = e.Title,
-                    Message = e.Message,
-                    StatusCode = e.StatusCode
-                }
-            };
+            logger.LogWarning(e, e.Message);
             
-            context.Response.Clear();
-            await context.Response.WriteAsJsonAsync(response);
+            await InterceptResponseAsync(e.Title,
+                e.Message,
+                e.StatusCode);
         }
         catch (Exception e)
         {
-            logger.LogWarning(e, e.Message);
+            logger.LogError(e, e.Message);
             
+            await InterceptResponseAsync("Unknown server error", 
+                "Please retry query", 
+                StatusCodes.Status500InternalServerError);
+        }
+
+        async Task InterceptResponseAsync(string title, string message, int statusCode)
+        {
             var response = new CommonResponse<Empty>
             {
                 Data = null,
                 Error = new Error
                 {
-                    Title = "Unknown server error",
-                    Message = "Please retry query",
-                    StatusCode = StatusCodes.Status500InternalServerError
+                    Title = title,
+                    Message = message,
+                    StatusCode = statusCode
                 }
             };
             
