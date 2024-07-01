@@ -1,9 +1,9 @@
 using Infrastructure.JwtProvider.Implementations;
 using Infrastructure.PasswordHasher;
+using Infrastructure.Repositories.Implementations;
 using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
-using Persistence.Repositories.Implementations;
 using Services.Auth.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;

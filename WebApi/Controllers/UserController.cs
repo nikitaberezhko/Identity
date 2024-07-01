@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Abstractions;
 using Services.Services.Models.User.Request;
-using WebApi.Mapping;
 using WebApi.Models;
-using WebApi.Models.User;
 using WebApi.Models.User.Requests;
 using WebApi.Models.User.Responses;
 
@@ -75,13 +73,13 @@ public class UserController(
         var result = await userService.AuthorizeUser(
             mapper.Map<AuthorizationUserModel>(model));
 
-        var responseModel = mapper.Map<AuthorizationResponse>(result);
+        var authModel = mapper.Map<AuthorizationResponse>(result);
         var response = new CommonResponse<AuthorizationResponse>
         {
             Data = new AuthorizationResponse
             {
-                UserId = responseModel.UserId,
-                RoleId = responseModel.RoleId
+                UserId = authModel.UserId,
+                RoleId = authModel.RoleId
             }
         };
         

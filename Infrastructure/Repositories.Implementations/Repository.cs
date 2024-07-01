@@ -1,10 +1,10 @@
 using Domain;
-using Exceptions.Persistence;
+using Exceptions.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Services.Repositories.Abstractions;
 
-namespace Persistence.Repositories.Implementations;
+namespace Infrastructure.Repositories.Implementations;
 
 public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
     where T : BaseEntity

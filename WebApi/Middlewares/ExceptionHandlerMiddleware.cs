@@ -1,4 +1,4 @@
-using Exceptions.Persistence;
+using Exceptions.Infrastructure;
 using Exceptions.Services;
 using WebApi.Models;
 
