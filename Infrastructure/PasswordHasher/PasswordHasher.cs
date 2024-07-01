@@ -1,4 +1,4 @@
-using Services.JwtProvider.Abstractions;
+using Services.Auth.Abstractions;
 
 namespace Infrastructure.PasswordHasher;
 

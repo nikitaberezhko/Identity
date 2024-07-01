@@ -1,6 +1,6 @@
-namespace Services.Services.Contracts.User;
+namespace WebApi.Models.User.Requests;
 
-public class AuthenticateUserDto
+public class AuthenticateUserRequest
 {
     public string Login { get; set; }
     

@@ -5,7 +5,7 @@ using Domain;
 using Infrastructure.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Services.JwtProvider.Abstractions;
+using Services.Auth.Abstractions;
 
 namespace Infrastructure.JwtProvider.Implementations;
 

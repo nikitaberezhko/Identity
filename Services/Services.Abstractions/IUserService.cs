@@ -1,17 +1,16 @@
-using Domain;
-using Services.Services.Contracts.User;
-using Services.Services.Contracts.User.Response;
+using Services.Services.Models.User.Request;
+using Services.Services.Models.User.Response;
 
 namespace Services.Services.Abstractions;
 
 public interface IUserService
 {
-    public Task<Guid> CreateUser(CreateUserDto createUserDto);
+    public Task<Guid> CreateUser(CreateUserModel createUserModel);
     
-    public Task<string?> AuthenticateUser(AuthenticateUserDto authenticateUserDto);
+    public Task<string?> AuthenticateUser(AuthenticateUserModel authenticateUserModel);
 
-    public Task<ResponseAuthorizationUserDto> AuthorizeUser(
-        AuthorizationUserDto authorizationUserDto);
+    public Task<UserModel> AuthorizeUser(
+        AuthorizationUserModel authorizationUserModel);
     
-    public Task<User?> DeleteUser(DeleteUserDto deleteUserDto);
+    public Task<UserModel> DeleteUser(DeleteUserModel deleteUserModel);
 }

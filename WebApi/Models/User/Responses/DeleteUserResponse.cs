@@ -1,6 +1,6 @@
 namespace WebApi.Mapping;
 
-public class ResponseDeleteUserModel
+public class DeleteUserResponse
 {
     public Guid Id { get; set; }
     

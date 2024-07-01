@@ -1,6 +1,6 @@
-namespace Services.Services.Contracts.User;
+namespace WebApi.Models.User.Requests;
 
-public class CreateUserDto
+public class CreateUserRequest
 {
     public int RoleId { get; set; }
     

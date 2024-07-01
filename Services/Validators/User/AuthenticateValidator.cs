@@ -1,9 +1,9 @@
 using FluentValidation;
-using Services.Services.Contracts.User;
+using Services.Services.Models.User.Request;
 
 namespace Services.Validators.User;
 
-public class AuthenticateValidator : AbstractValidator<AuthenticateUserDto>
+public class AuthenticateValidator : AbstractValidator<AuthenticateUserModel>
 {
     public AuthenticateValidator()
     {

@@ -4,11 +4,11 @@ using Domain;
 using Exceptions.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using Services.JwtProvider.Abstractions;
+using Services.Auth.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
-using Services.Services.Contracts.User;
-using Services.Services.Contracts.User.Response;
+using Services.Services.Models.User.Request;
+using Services.Services.Models.User.Response;
 
 namespace Services.Services.Implementations;
 
@@ -17,15 +17,15 @@ public class UserService(
     IMapper mapper,
     IJwtProvider jwtProvider,
     IPasswordHasher passwordHasher,
-    IValidator<AuthenticateUserDto> authenticateUserValidator,
-    IValidator<AuthorizationUserDto> authorizationUserValidator,
-    IValidator<CreateUserDto> createUserValidator,
-    IValidator<DeleteUserDto> deleteUserValidator)
+    IValidator<AuthenticateUserModel> authenticateUserValidator,
+    IValidator<AuthorizationUserModel> authorizationUserValidator,
+    IValidator<CreateUserModel> createUserValidator,
+    IValidator<DeleteUserModel> deleteUserValidator)
     : IUserService
 {
-    public async Task<Guid> CreateUser(CreateUserDto createUserDto)
+    public async Task<Guid> CreateUser(CreateUserModel createUserModel)
     {
-        var validationResult = await createUserValidator.ValidateAsync(createUserDto);
+        var validationResult = await createUserValidator.ValidateAsync(createUserModel);
         
         if (!validationResult.IsValid)
             throw new ServiceException
@@ -35,7 +35,7 @@ public class UserService(
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
-        var user = mapper.Map<User>(createUserDto);
+        var user = mapper.Map<User>(createUserModel);
         
         user.Password = passwordHasher.GenerateHash(user.Password);
         
@@ -43,9 +43,10 @@ public class UserService(
         return id;
     }
     
-    public async Task<string> AuthenticateUser(AuthenticateUserDto authenticateUserDto)
+    public async Task<string> AuthenticateUser(AuthenticateUserModel authenticateUserModel)
     {
-        var validationResult = await authenticateUserValidator.ValidateAsync(authenticateUserDto);
+        var validationResult = await authenticateUserValidator
+            .ValidateAsync(authenticateUserModel);
 
         if (!validationResult.IsValid)
             throw new ServiceException
@@ -55,7 +56,7 @@ public class UserService(
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
-        var authUser = mapper.Map<User>(authenticateUserDto);
+        var authUser = mapper.Map<User>(authenticateUserModel);
         var user = await userRepository.GetByLogin(authUser);
 
         if (passwordHasher.VerifyHash(user.Password, user.Password))
@@ -78,11 +79,11 @@ public class UserService(
         return token;
     }
     
-    public async Task<ResponseAuthorizationUserDto> AuthorizeUser(
-        AuthorizationUserDto authorizationUserDto)
+    public async Task<UserModel> AuthorizeUser(
+        AuthorizationUserModel authorizationUserModel)
     {
         var validationResult = 
-            await authorizationUserValidator.ValidateAsync(authorizationUserDto);
+            await authorizationUserValidator.ValidateAsync(authorizationUserModel);
 
         if (!validationResult.IsValid)
             throw new ServiceException
@@ -92,21 +93,21 @@ public class UserService(
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
-        var jwtSecurityToken = new JwtSecurityToken(authorizationUserDto.Token);
+        var jwtSecurityToken = new JwtSecurityToken(authorizationUserModel.Token);
         var claims = jwtSecurityToken.Claims.ToArray();
         
-        var result = new ResponseAuthorizationUserDto
+        var result = new UserModel
         {
-            UserId = Guid.Parse(claims[0].Value),
+            Id = Guid.Parse(claims[0].Value),
             RoleId = int.Parse(claims[1].Value)
         };
         
         return result;
     }
 
-    public async Task<User?> DeleteUser(DeleteUserDto deleteUserDto)
+    public async Task<UserModel> DeleteUser(DeleteUserModel deleteUserModel)
     {
-        var validationResult = await deleteUserValidator.ValidateAsync(deleteUserDto);
+        var validationResult = await deleteUserValidator.ValidateAsync(deleteUserModel);
 
         if (!validationResult.IsValid)
             throw new ServiceException
@@ -116,7 +117,9 @@ public class UserService(
                 StatusCode = StatusCodes.Status400BadRequest
             };
         
-        var delUser = mapper.Map<DeleteUserDto, User>(deleteUserDto);
-        return await userRepository.DeleteAsync(delUser.Id);
+        var user = await userRepository.DeleteAsync(deleteUserModel.Id);
+
+        var result = mapper.Map<UserModel>(user);
+        return result;
     }
 }

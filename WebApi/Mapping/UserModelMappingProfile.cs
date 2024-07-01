@@ -1,6 +1,6 @@
 using AutoMapper;
-using Services.Services.Contracts.User;
-using Services.Services.Contracts.User.Response;
+using Services.Services.Models.User.Request;
+using Services.Services.Models.User.Response;
 using WebApi.Models.User.Requests;
 using WebApi.Models.User.Responses;
 
@@ -11,25 +11,30 @@ public class UserModelMappingProfile : Profile
     public UserModelMappingProfile()
     {
         // Request models
-        CreateMap<RequestAuthenticateUserModel, AuthenticateUserDto>()
+        CreateMap<AuthenticateUserRequest, AuthenticateUserModel>()
             .ForMember(d => d.Login, map => map.MapFrom(c => c.Login))
             .ForMember(d => d.Password, map => map.MapFrom(c => c.Password));
 
-        CreateMap<RequestAuthorizationUserModel, AuthorizationUserDto>()
+        CreateMap<AuthorizationUserRequest, AuthorizationUserModel>()
             .ForMember(d => d.Token, map => map.MapFrom(c => c.Token));
         
-        CreateMap<RequestCreateUserModel, CreateUserDto>()
+        CreateMap<CreateUserRequest, CreateUserModel>()
             .ForMember(d => d.RoleId, map => map.MapFrom(c => c.RoleId))
             .ForMember(d => d.Login, map => map.MapFrom(c => c.Login))
             .ForMember(d => d.Password, map => map.MapFrom(c => c.Password))
             .ForMember(d => d.Name, map => map.MapFrom(c => c.Name));
 
-        CreateMap<RequestDeleteUserModel, DeleteUserDto>()
+        CreateMap<DeleteUserRequest, DeleteUserModel>()
             .ForMember(d => d.Id, map => map.MapFrom(c => c.Id));
         
         // response models
-        CreateMap<ResponseAuthorizationUserDto, ResponseAuthorizationModel>()
-            .ForMember(d => d.UserId, map => map.MapFrom(c => c.UserId))
+        CreateMap<UserModel, AuthorizationResponse>()
+            .ForMember(d => d.UserId, map => map.MapFrom(c => c.Id))
             .ForMember(d => d.RoleId, map => map.MapFrom(c => c.RoleId));
+        
+        CreateMap<UserModel, DeleteUserResponse>()
+            .ForMember(d => d.Id, map => map.MapFrom(c => c.Id))
+            .ForMember(d => d.RoleId, map => map.MapFrom(c => c.RoleId))
+            .ForMember(d => d.Name, map => map.MapFrom(c => c.Name));
     }
 }

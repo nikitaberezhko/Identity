@@ -1,6 +1,6 @@
 namespace WebApi.Models.User;
 
-public class ResponseAuthenticateUserModel
+public class AuthenticateUserResponse
 {
     public string Token { get; set; }
 }

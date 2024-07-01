@@ -1,4 +1,4 @@
-namespace Services.JwtProvider.Abstractions;
+namespace Services.Auth.Abstractions;
 
 public interface IPasswordHasher
 {

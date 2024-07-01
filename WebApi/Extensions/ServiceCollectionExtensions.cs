@@ -6,7 +6,7 @@ using Infrastructure.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Services.Services.Contracts.User;
+using Services.Services.Models.User.Request;
 using Services.Validators.User;
 
 namespace WebApi.Extensions;
@@ -70,10 +70,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection ConfigureUserValidators(
         this IServiceCollection services)
     {
-        services.AddScoped<IValidator<AuthenticateUserDto>, AuthenticateValidator>();
-        services.AddScoped<IValidator<AuthorizationUserDto>, AuthorizationValidator>();
-        services.AddScoped<IValidator<CreateUserDto>, CreateUserValidator>();
-        services.AddScoped<IValidator<DeleteUserDto>, DeleteUserValidator>();
+        services.AddScoped<IValidator<AuthenticateUserModel>, AuthenticateValidator>();
+        services.AddScoped<IValidator<AuthorizationUserModel>, AuthorizationValidator>();
+        services.AddScoped<IValidator<CreateUserModel>, CreateUserValidator>();
+        services.AddScoped<IValidator<DeleteUserModel>, DeleteUserValidator>();
         
         return services;
     }

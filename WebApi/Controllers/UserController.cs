@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services.Abstractions;
-using Services.Services.Contracts.User;
+using Services.Services.Models.User.Request;
 using WebApi.Mapping;
 using WebApi.Models;
 using WebApi.Models.User;
@@ -20,29 +20,29 @@ public class UserController(
     IMapper mapper) : ControllerBase
 {
     [HttpPost("create")]
-    public async Task<ActionResult<CommonResponse<ResponseCreateUserModel>>> CreateAsync(
-        RequestCreateUserModel model)
+    public async Task<ActionResult<CommonResponse<CreateUserResponse>>> CreateAsync(
+        CreateUserRequest model)
     {
-        var id = await userService.CreateUser(mapper.Map<CreateUserDto>(model));
+        var id = await userService.CreateUser(mapper.Map<CreateUserModel>(model));
 
         var response = new CreatedResult(nameof(CreateAsync),
-            new CommonResponse<ResponseCreateUserModel>
+            new CommonResponse<CreateUserResponse>
             {
-                Data = new ResponseCreateUserModel { Id = id },
+                Data = new CreateUserResponse { Id = id },
             });
         
         return response;
     }
 
     [HttpDelete("delete")]
-    public async Task<ActionResult<CommonResponse<ResponseDeleteUserModel>>> DeleteAsync(
-        RequestDeleteUserModel model)
+    public async Task<ActionResult<CommonResponse<DeleteUserResponse>>> DeleteAsync(
+        DeleteUserRequest model)
     {
-        var user = await userService.DeleteUser(mapper.Map<DeleteUserDto>(model));
+        var user = await userService.DeleteUser(mapper.Map<DeleteUserModel>(model));
 
-        var response = new CommonResponse<ResponseDeleteUserModel>
+        var response = new CommonResponse<DeleteUserResponse>
         {
-            Data = new ResponseDeleteUserModel
+            Data = new DeleteUserResponse
             {
                 Id = user.Id,
                 Name = user.Name,
@@ -54,31 +54,31 @@ public class UserController(
     }
     
     [HttpPost("authenticate")]
-    public async Task<ActionResult<CommonResponse<ResponseAuthenticateUserModel>>> AuthenticateAsync(
-        RequestAuthenticateUserModel model)
+    public async Task<ActionResult<CommonResponse<AuthenticateUserResponse>>> AuthenticateAsync(
+        AuthenticateUserRequest model)
     {
         var token = await userService.AuthenticateUser(
-            mapper.Map<AuthenticateUserDto>(model));
+            mapper.Map<AuthenticateUserModel>(model));
 
-        var response = new CommonResponse<ResponseAuthenticateUserModel>
+        var response = new CommonResponse<AuthenticateUserResponse>
         {
-            Data = new ResponseAuthenticateUserModel { Token = token }
+            Data = new AuthenticateUserResponse { Token = token }
         };
         return response;
     }
 
     [Authorize]
     [HttpPost("authorize")]
-    public async Task<ActionResult<CommonResponse<ResponseAuthorizationModel>>> AuthorizeAsync(
-        RequestAuthorizationUserModel model)
+    public async Task<ActionResult<CommonResponse<AuthorizationResponse>>> AuthorizeAsync(
+        AuthorizationUserRequest model)
     {
         var result = await userService.AuthorizeUser(
-            mapper.Map<AuthorizationUserDto>(model));
+            mapper.Map<AuthorizationUserModel>(model));
 
-        var responseModel = mapper.Map<ResponseAuthorizationModel>(result);
-        var response = new CommonResponse<ResponseAuthorizationModel>
+        var responseModel = mapper.Map<AuthorizationResponse>(result);
+        var response = new CommonResponse<AuthorizationResponse>
         {
-            Data = new ResponseAuthorizationModel
+            Data = new AuthorizationResponse
             {
                 UserId = responseModel.UserId,
                 RoleId = responseModel.RoleId

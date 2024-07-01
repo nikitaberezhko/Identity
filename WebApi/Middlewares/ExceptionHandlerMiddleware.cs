@@ -1,6 +1,5 @@
 using Exceptions.Infrastructure;
 using Exceptions.Services;
-using FluentValidation;
 using WebApi.Models;
 
 namespace WebApi.Middlewares;

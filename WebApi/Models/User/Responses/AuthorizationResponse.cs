@@ -1,6 +1,6 @@
 namespace WebApi.Models.User.Responses;
 
-public class ResponseAuthorizationModel
+public class AuthorizationResponse
 {
     public Guid UserId { get; set; }
     public int RoleId { get; set; }

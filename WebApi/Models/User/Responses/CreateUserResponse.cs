@@ -1,6 +1,6 @@
 namespace WebApi.Models.User;
 
-public class ResponseCreateUserModel
+public class CreateUserResponse
 {
     public Guid Id { get; set; }
 }

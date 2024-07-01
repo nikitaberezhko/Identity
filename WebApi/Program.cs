@@ -4,7 +4,7 @@ using Infrastructure.PasswordHasher;
 using Infrastructure.Repositories.Implementations;
 using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
-using Services.JwtProvider.Abstractions;
+using Services.Auth.Abstractions;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
 using Services.Services.Implementations;

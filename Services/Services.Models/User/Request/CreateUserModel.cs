@@ -1,6 +1,6 @@
-namespace WebApi.Models.User.Requests;
+namespace Services.Services.Models.User.Request;
 
-public class RequestCreateUserModel
+public class CreateUserModel
 {
     public int RoleId { get; set; }
     

@@ -1,6 +1,6 @@
 namespace WebApi.Models.User.Requests;
 
-public class RequestAuthorizationUserModel
+public class AuthorizationUserRequest
 {
     public string Token { get; set; }
 }
