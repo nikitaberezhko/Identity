@@ -1,8 +1,8 @@
 namespace Domain;
 
-public class Role : BaseEntity
+public class Role
 {
-    public new int Id { get; set; }
+    public int Id { get; set; }
     
     public string Name { get; set; }
 }

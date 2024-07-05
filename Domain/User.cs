@@ -1,7 +1,9 @@
 namespace Domain;
 
-public class User : BaseEntity
+public class User
 {
+    public Guid Id { get; set; }
+    
     public int RoleId { get; set; }
     
     public Role Role { get; set; }
