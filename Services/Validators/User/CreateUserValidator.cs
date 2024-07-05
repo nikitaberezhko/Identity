@@ -7,7 +7,9 @@ public class CreateUserValidator : AbstractValidator<CreateUserModel>
 {
     public CreateUserValidator()
     {
-        RuleFor(x => x.RoleId).NotEmpty();
+        RuleFor(x => x.RoleId)
+            .NotEmpty()
+            .NotEmpty();
 
         RuleFor(x => x.Name).NotEmpty();
 

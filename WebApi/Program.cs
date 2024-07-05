@@ -5,10 +5,10 @@ using Infrastructure.Settings;
 using Microsoft.EntityFrameworkCore;
 using Persistence.EntityFramework;
 using Services.Auth.Abstractions;
+using Services.Mapping;
 using Services.Repositories.Abstractions;
 using Services.Services.Abstractions;
 using Services.Services.Implementations;
-using Services.Services.Implementations.Mapping;
 using WebApi.Extensions;
 using WebApi.Mapping;
 using WebApi.Middlewares;
@@ -29,7 +29,8 @@ public class Program
         
         // Extensions
         services.ConfigureApiVersioning();
-        services.ConfigureContext(builder.Configuration.GetConnectionString("DefaultConnectionString")!);
+        services.ConfigureContext(builder.Configuration.GetConnectionString(
+            "DefaultConnectionString")!);
         services.AddScoped<DbContext, DataContext>();
         services.ConfigureAuthServices(builder.Configuration);
         services.ConfigureUserValidators();

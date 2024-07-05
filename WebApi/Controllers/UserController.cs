@@ -11,17 +11,17 @@ using WebApi.Models.User.Responses;
 namespace WebApi.Controllers;
 
 [ApiController]
-[Route("api/v{v:apiVersion}/users/")]
+[Route("api/v{v:apiVersion}/users")]
 [ApiVersion(1.0)]
 public class UserController(
     IUserService userService,
     IMapper mapper) : ControllerBase
 {
-    [HttpPost("create")]
+    [HttpPost]
     public async Task<ActionResult<CommonResponse<CreateUserResponse>>> CreateAsync(
-        CreateUserRequest model)
+        CreateUserRequest request)
     {
-        var id = await userService.CreateUser(mapper.Map<CreateUserModel>(model));
+        var id = await userService.CreateUser(mapper.Map<CreateUserModel>(request));
 
         var response = new CreatedResult(nameof(CreateAsync),
             new CommonResponse<CreateUserResponse>
@@ -32,11 +32,11 @@ public class UserController(
         return response;
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete]
     public async Task<ActionResult<CommonResponse<DeleteUserResponse>>> DeleteAsync(
-        DeleteUserRequest model)
+        DeleteUserRequest request)
     {
-        var user = await userService.DeleteUser(mapper.Map<DeleteUserModel>(model));
+        var user = await userService.DeleteUser(mapper.Map<DeleteUserModel>(request));
 
         var response = new CommonResponse<DeleteUserResponse>
         {
@@ -53,10 +53,10 @@ public class UserController(
     
     [HttpPost("authenticate")]
     public async Task<ActionResult<CommonResponse<AuthenticateUserResponse>>> AuthenticateAsync(
-        AuthenticateUserRequest model)
+        AuthenticateUserRequest request)
     {
         var token = await userService.AuthenticateUser(
-            mapper.Map<AuthenticateUserModel>(model));
+            mapper.Map<AuthenticateUserModel>(request));
 
         var response = new CommonResponse<AuthenticateUserResponse>
         {
@@ -68,10 +68,10 @@ public class UserController(
     [Authorize]
     [HttpPost("authorize")]
     public async Task<ActionResult<CommonResponse<AuthorizationResponse>>> AuthorizeAsync(
-        AuthorizationUserRequest model)
+        AuthorizationUserRequest request)
     {
         var result = await userService.AuthorizeUser(
-            mapper.Map<AuthorizationUserModel>(model));
+            mapper.Map<AuthorizationUserModel>(request));
 
         var authModel = mapper.Map<AuthorizationResponse>(result);
         var response = new CommonResponse<AuthorizationResponse>

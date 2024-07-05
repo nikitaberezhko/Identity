@@ -10,16 +10,6 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
     where T : BaseEntity
 {
     protected readonly DbContext DbContext = dbContext;
-
-    public virtual async Task<List<T>> GetAllAsync()
-    {
-        return await DbContext.Set<T>().ToListAsync();
-    }
-    
-    public virtual async Task<T?> GetAsync(Guid id)
-    {
-        return await DbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
-    }
     
     public virtual async Task<Guid> AddAsync(T entity)
     {
@@ -40,19 +30,6 @@ public abstract class Repository<T>(DbContext dbContext) : IRepository<T>
                 StatusCode = StatusCodes.Status409Conflict
             };
         }
-    }
-    
-    public virtual async Task<bool> UpdateAsync(T entity)
-    {
-        var obj = await DbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == entity.Id);
-        if (obj != null)
-        {
-            obj = entity;
-            await DbContext.SaveChangesAsync();
-            return true;
-        }
-        
-        return false;
     }
     
     public virtual async Task<T> DeleteAsync(Guid id)

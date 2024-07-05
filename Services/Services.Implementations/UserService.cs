@@ -20,8 +20,7 @@ public class UserService(
     IValidator<AuthenticateUserModel> authenticateUserValidator,
     IValidator<AuthorizationUserModel> authorizationUserValidator,
     IValidator<CreateUserModel> createUserValidator,
-    IValidator<DeleteUserModel> deleteUserValidator)
-    : IUserService
+    IValidator<DeleteUserModel> deleteUserValidator) : IUserService
 {
     public async Task<Guid> CreateUser(CreateUserModel createUserModel)
     {

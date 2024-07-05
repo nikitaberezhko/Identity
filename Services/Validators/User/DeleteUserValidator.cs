@@ -7,6 +7,8 @@ public class DeleteUserValidator : AbstractValidator<DeleteUserModel>
 {
     public DeleteUserValidator()
     {
-        RuleFor(x => x.Id).NotEqual(Guid.Empty);
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .NotEqual(Guid.Empty);
     }
 }

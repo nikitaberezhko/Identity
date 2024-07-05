@@ -3,7 +3,7 @@ using Domain;
 using Services.Services.Models.User.Request;
 using Services.Services.Models.User.Response;
 
-namespace Services.Services.Implementations.Mapping;
+namespace Services.Mapping;
 
 public class UserMappingProfile : Profile
 {

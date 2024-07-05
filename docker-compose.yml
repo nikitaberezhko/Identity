@@ -23,8 +23,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: identity_db
+      PGPORT: 5433
     ports:
-      - "5433:5432"
+      - "5433:5433"
     networks:
       - deploy-dev
     volumes:

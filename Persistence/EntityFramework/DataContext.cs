@@ -3,13 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.EntityFramework;
 
-public class DataContext : DbContext
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
 {
     DbSet<User> Users { get; set; }
-    
-    public DataContext(DbContextOptions<DataContext> options) 
-        : base(options) { }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Role>()
